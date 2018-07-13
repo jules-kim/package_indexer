@@ -31,7 +31,7 @@ func StartServer() error {
 			log.Printf("%s", err)
 			return err 
 		}
-		fmt.Println("Request from client made")
+		log.Println("Request from client made")			/* log new client request 	*/ 
 		// go routine 
 		go handleConnection(conn)						/* handle client connection */
 	}
@@ -44,9 +44,10 @@ func handleConnection(conn net.Conn) {
 	reader := bufio.NewReader(conn)						/* Set up buffer reader 	*/ 	
 	request, err := reader.ReadString('\n') 			/* Read client request 		*/ 
 	if err != nil {
-		log.Fatal("%s", err)
+		log.Println("%s", err)
+		return 
 	}
-	fmt.Println(request)
+	log.Println(request)
 }
 
 
