@@ -3,7 +3,7 @@ package main
 
 import (
 	"fmt"
-	"strings"
+	"bytes"
 )
 
 // parseRequest takes the client request in the form of a
@@ -11,6 +11,19 @@ import (
 // <command> <package> <dependencies> 
 // It returns these three in the Request struct 
 func ParseRequest(req []byte) Request {
-	
+	splitReq := bytes.Split(req, []byte("|"))		/* split the byte[] by | */
+	if len(splitReq) != 3 {
+		log.Println("Error: incorrect request format")
+		return 
+	}
+
+	// no dependencies included, then dep is ""
+
+
+	return Request("", "", "")
+}
+
+// parse dependencies by , 
+func ParseDep(dep []byte) []string {
 
 }
