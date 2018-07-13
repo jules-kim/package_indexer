@@ -4,7 +4,8 @@ package main
 // three aspects of the client request,
 // the command, package, and dependencies 
 type Request struct {
-	comm string
-	pack string 
-	dep []string
+	comm 	string
+	pack 	string 
+	dep 	[]string
+	err 	string 
 }
