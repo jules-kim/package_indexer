@@ -8,8 +8,8 @@ import (
 )
 
 const (
-	PORT = ":8080" 			/* assigned port number 		*/
-	CONN_TYPE = "tcp"		/* assigned connection protocol */
+	PORT = ":8080" 										/* assigned port number 		*/
+	CONN_TYPE = "tcp"									/* assigned connection protocol */
 )
 
 // start running the server with tcp connection 
@@ -38,7 +38,7 @@ func StartServer() error {
 }
 
 // handles client connections 
-// reads input from buffer
+// reads input from buffer and logs request 
 func handleConnection(conn net.Conn) {
 	fmt.Println("Handling new connection...")
 	reader := bufio.NewReader(conn)						/* Set up buffer reader 	*/ 	
@@ -47,7 +47,7 @@ func handleConnection(conn net.Conn) {
 		log.Println("%s", err)
 		return 
 	}
-	log.Println(request)
+	log.Println(request)								/* Log unparsed request 	*/ 
+	// ParseRequest(request)								/* Send buf array to parser */ 
 }
-
 

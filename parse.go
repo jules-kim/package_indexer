@@ -4,8 +4,6 @@ import (
 	"bytes"
 )
 
-// TODO: Need to trim for spaces 
-
 // file to parse client requests into command, 
 // package, and dependencies
 
