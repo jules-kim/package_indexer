@@ -5,7 +5,6 @@ import (
 )
 
 // TODO: Need to trim for spaces 
-// TESTS 
 
 // file to parse client requests into command, 
 // package, and dependencies
