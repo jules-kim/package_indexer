@@ -8,9 +8,11 @@ import (
 )
 
 const (
-	PORT = ":8080" 										/* assigned port number 		*/
-	CONN_TYPE = "tcp"									/* assigned connection protocol */
+	PORT = ":8080" 										/* assigned port number 	*/
+	CONN_TYPE = "tcp"									/* assigned conn protocol 	*/
 )
+
+var	pi = CreatePackageIndexer() 						/* instan a package indexer */ 
 
 // start running the server with tcp connection 
 // for multiple client connections 
@@ -48,6 +50,7 @@ func handleConnection(conn net.Conn) {
 		return 
 	}
 	log.Println(request)								/* Log unparsed request 	*/ 
-	// ParseRequest(request)								/* Send buf array to parser */ 
+	req := ParseRequest(request)						/* Send buf array to parser */ 
+	HandleRequest(req)
 }
 
