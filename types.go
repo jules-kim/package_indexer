@@ -22,6 +22,6 @@ type PackageIndexer struct {
 // This type is used to represent packages
 // and their dependencies 
 type Package struct {
-	Name	string 
+	name	string 
 	deps 	[]*Package
 }
