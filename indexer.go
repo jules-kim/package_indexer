@@ -3,9 +3,9 @@ package main
 import "sync"
 
 const (
-	OK = "OK"
-	FAIL = "FAIL"
-	ERROR = "ERROR"
+	OK = "OK\n"
+	FAIL = "FAIL\n"
+	ERROR = "ERROR\n"
 )
 
 // Creates an instance of the PackageIndexer struct 
@@ -21,6 +21,9 @@ func CreatePackageIndexer() *PackageIndexer {
 // directs the control flow to the correct function
 // depending on the command given by the client 
 func (pi *PackageIndexer) HandleRequest(req Request) string {
+	if req.err != "" {
+		return ERROR 
+	}
 	pack := Package{name: req.pack}								/* set the name of the package 	*/
 	for _, name := range req.dep {								/* add package dependencies 	*/ 
 		pack.deps = append(pack.deps, &Package{name: name})
