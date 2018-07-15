@@ -10,8 +10,9 @@ import "strings"
 // <command> <package> <dependencies> 
 // It returns these three in a Request struct 
 func ParseRequest(req string) Request {
-	// TODO: trim spaces 
-	splitReq := strings.Split(req, "|")							/* split the string by "|"		*/
+	trimReq := strings.TrimSpace(strings.TrimSuffix(req, "\n"))
+
+	splitReq := strings.Split(trimReq, "|")						/* split the string by "|"		*/
 	if len(splitReq) != 3 {
 		return Request{"", "", nil, "Incorrect request format"}
 	}
