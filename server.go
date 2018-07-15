@@ -23,10 +23,8 @@ func StartServer() error {
 		log.Printf("%s", err)
 		return err
 	}
-	
 	fmt.Println("Server is running...")
 	fmt.Println("Server listening on port...", PORT)	/* successfully listening 	*/
-	
 	for {												/* accept incoming requests */ 
 		conn, err := ln.Accept()  
 		if err != nil {
@@ -42,6 +40,8 @@ func StartServer() error {
 // handles client connections 
 // reads input from buffer and logs request 
 func handleConnection(conn net.Conn) {
+	defer conn.Close()
+
 	fmt.Println("Handling new connection...")
 	reader := bufio.NewReader(conn)						/* Set up buffer reader 	*/ 	
 	request, err := reader.ReadString('\n') 			/* Read client request 		*/ 
@@ -50,7 +50,15 @@ func handleConnection(conn net.Conn) {
 		return 
 	}
 	log.Println(request)								/* Log unparsed request 	*/ 
-	req := ParseRequest(request)						/* Send buf array to parser */ 
-	HandleRequest(req)
+	req := ParseRequest(request)						/* Send string  to parser 	*/
+	response := pi.HandleRequest(req)					/* Send req to indexer 		*/
+	// log request and response here  
+	log.Println("")
+	writer := bufio.NewWriter(conn)
+	_, err := writer.WriteString(response)
+	if err != nil {
+		fmt.Errorf("Issue writing back to client %s", err)
+		continue 
+	}
 }
 
