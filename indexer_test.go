@@ -1,8 +1,6 @@
 package main 
 
-import (
-	"testing"
-)
+import "testing"
 
 /* Test Indexing packages */
 
@@ -10,7 +8,7 @@ import (
 func TestIndex_No_Dep_Empty_OK(t *testing.T) {
 	pi := CreatePackageIndexer()
 	p := Package{name: "cloog"}
-	if pi.Index(&p) != "OK" {
+	if pi.Index(&p) != OK {
 		t.Errorf("Expected indexing to succeed") 
 	}
 }
@@ -20,7 +18,7 @@ func TestIndex_NO_Dep_NONEMPTY_OK(t *testing.T) {
 	pi := CreatePackageIndexer()
 	p := &Package{name: "cloog"}
 	pi.packs[p.name] = p
-	if pi.Index(p) != "OK" {
+	if pi.Index(p) != OK {
 		t.Errorf("Expected indexing to succeed") 
 	}
 }
@@ -31,7 +29,7 @@ func TestIndex_One_Dep_OK(t *testing.T) {
 	d := &Package{name: "gmp"}
 	p := Package{name:"cloog", deps: []*Package{d}}
 	pi.packs[d.name] = d
-	if pi.Index(&p) != "OK" {
+	if pi.Index(&p) != OK {
 		t.Errorf("Expected indexing to succeed") 
 	}
 }
@@ -41,7 +39,7 @@ func TestIndex_Dep_FAIL(t *testing.T) {
 	pi := CreatePackageIndexer()
 	d := &Package{name: "gmp"}
 	p := Package{name:"cloog", deps: []*Package{d}}
-	if pi.Index(&p) != "FAIL" {
+	if pi.Index(&p) != FAIL {
 		t.Errorf("Expected indexing to fail") 
 	}
 }	
@@ -52,7 +50,7 @@ func TestIndex_Dep_FAIL(t *testing.T) {
 func TestRemove_Empty_OK(t *testing.T) {
 	pi := CreatePackageIndexer()
 	p := Package{name: "cloog"}
-	if pi.Remove(&p) != "OK" {
+	if pi.Remove(&p) != OK {
 		t.Errorf("Expected removing to succeed") 
 	}
 }
@@ -63,7 +61,7 @@ func TestRemove_Unindexed_OK(t *testing.T) {
 	p := &Package{name: "cloog"}
 	pi.packs[p.name] = p
 	p2 := Package{name: "gmp"}
-	if pi.Remove(&p2) != "OK" {
+	if pi.Remove(&p2) != OK {
 		t.Errorf("Expected removing to succeed") 
 	}
 }
@@ -77,7 +75,7 @@ func TestRemove_No_Dep_OK(t *testing.T) {
 	pi.packs[p.name] = p
 	p2 := &Package{name: "isl"}
 	pi.packs[p2.name] = p2
-	if pi.Remove(p2) != "OK" {
+	if pi.Remove(p2) != OK {
 		t.Errorf("Expected removing to succeed") 
 	}
 }
@@ -90,7 +88,7 @@ func TestRemove_Dep_FAIL(t *testing.T) {
 	p := &Package{name:"cloog", deps: []*Package{d}}
 	pi.packs[d.name] = d
 	pi.packs[p.name] = p
-	if pi.Remove(d) != "FAIL" {
+	if pi.Remove(d) != FAIL {
 		t.Errorf("Expected removing to fail") 
 	}
 }
@@ -103,7 +101,7 @@ func TestQuery_OK(t *testing.T) {
 	pi := CreatePackageIndexer()
 	p := &Package{name: "cloog"}
 	pi.packs[p.name] = p
-	if pi.Query(p.name) != "OK" {
+	if pi.Query(p.name) != OK {
 		t.Errorf("Expected querying to succeed") 
 	}
 }
@@ -118,7 +116,7 @@ func TestQuery_Multi_Packs_OK(t *testing.T) {
 	for _, pack := range p {
 		pi.packs[pack.name] = pack
 	}
-	if pi.Query("cloog") != "OK" {
+	if pi.Query("cloog") != OK {
 		t.Errorf("Expected querying to succeed") 
 	}
 }
@@ -127,7 +125,7 @@ func TestQuery_Multi_Packs_OK(t *testing.T) {
 func TestQuery_Empty_FAIL(t *testing.T) {
 	pi := CreatePackageIndexer()
 	p := &Package{name: "cloog"}
-	if pi.Query(p.name) != "FAIL" {
+	if pi.Query(p.name) != FAIL {
 		t.Errorf("Expected querying to fail") 
 	}
 }
@@ -137,7 +135,7 @@ func TestQuery_Nonempty_FAIL(t *testing.T) {
 	pi := CreatePackageIndexer()
 	p := &Package{name: "cloog"}
 	pi.packs[p.name] = p
-	if pi.Query("pkg-config") != "FAIL" {
+	if pi.Query("pkg-config") != FAIL {
 		t.Errorf("Expected querying to fail") 
 	}
 }

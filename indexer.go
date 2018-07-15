@@ -47,10 +47,12 @@ func (pi *PackageIndexer) HandleRequest(req Request) string {
 func (pi *PackageIndexer) Index(pack *Package) string {
 	pi.mutex.Lock() 
 	defer pi.mutex.Unlock()
+	// what if dependencies are ""??
+
 	// foreach loop over the package's dependencies 
 	for _, dep := range pack.deps {
 		// query for each dependency
-		if pi.Query(dep.name) == FAIL {
+		if dep.name != "" && pi.Query(dep.name) == FAIL {
 			// dependency not installed, cannot be indexed 
 			return FAIL
 		}
