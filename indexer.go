@@ -74,7 +74,7 @@ func (pi *PackageIndexer) Remove(pack *Package) string {
 		// go through each pack's dependencies 
 		for _, dep := range p.deps {
 			// a pack's dependency depends on the pack to be removed
-			if p.name == dep.name {
+			if pack.name == dep.name {
 				return FAIL
 			}
 		}
