@@ -14,6 +14,7 @@ func TestIndex_No_Dep_Empty_OK(t *testing.T) {
 		t.Errorf("Expected indexing to succeed") 
 	}
 }
+
 // index a package with no dependencies in a nonempty indexer
 func TestIndex_NO_Dep_NONEMPTY_OK(t *testing.T) {
 	pi := CreatePackageIndexer()
@@ -45,10 +46,54 @@ func TestIndex_Dep_FAIL(t *testing.T) {
 	}
 }	
 
-
-
 /* Test Removing packages */
 
+// test removing a package from an empty indexer
+func TestRemove_Empty_OK(t *testing.T) {
+	pi := CreatePackageIndexer()
+	p := Package{name: "cloog"}
+	if pi.Remove(&p) != "OK" {
+		t.Errorf("Expected removing to succeed") 
+	}
+}
+
+// test removing an unindexed package 
+func TestRemove_Unindexed_OK(t *testing.T) {
+	pi := CreatePackageIndexer()
+	p := &Package{name: "cloog"}
+	pi.packs[p.name] = p
+	p2 := Package{name: "gmp"}
+	if pi.Remove(&p2) != "OK" {
+		t.Errorf("Expected removing to succeed") 
+	}
+}
+
+// test removing a package without packages depending on it 
+func TestRemove_No_Dep_OK(t *testing.T) {
+	pi := CreatePackageIndexer()
+	d := &Package{name: "gmp"}
+	p := &Package{name:"cloog", deps: []*Package{d}}
+	pi.packs[d.name] = d
+	pi.packs[p.name] = p
+	p2 := &Package{name: "isl"}
+	pi.packs[p2.name] = p2
+	if pi.Remove(p2) != "OK" {
+		t.Errorf("Expected removing to succeed") 
+	}
+}
+
+// test not being able to remove a package because other
+// packages depend on it 
+func TestRemove_Dep_FAIL(t *testing.T) {
+	pi := CreatePackageIndexer()
+	d := &Package{name: "gmp"}
+	p := &Package{name:"cloog", deps: []*Package{d}}
+	pi.packs[d.name] = d
+	pi.packs[p.name] = p
+	if pi.Remove(d) != "FAIL" {
+		t.Errorf("Expected removing to fail") 
+	}
+}
 
 /* Test Querying packages */ 
 
