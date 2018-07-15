@@ -31,8 +31,8 @@ func StartServer() error {
 			log.Printf("%s", err)
 			return err 
 		}
-		log.Println("Request from client made")			/* log new client request 	*/ 
 		// go routine 
+		log.Println("[+] Handling new connection...")
 		go handleConnection(conn)						/* handle client connection */
 	}
 }
@@ -41,24 +41,23 @@ func StartServer() error {
 // reads input from buffer and logs request 
 func handleConnection(conn net.Conn) {
 	defer conn.Close()
-
-	fmt.Println("Handling new connection...")
-	reader := bufio.NewReader(conn)						/* Set up buffer reader 	*/ 	
-	request, err := reader.ReadString('\n') 			/* Read client request 		*/ 
-	if err != nil {
-		log.Println("%s", err)
-		return 
-	}
-	log.Println(request)								/* Log unparsed request 	*/ 
-	req := ParseRequest(request)						/* Send string  to parser 	*/
-	response := pi.HandleRequest(req)					/* Send req to indexer 		*/
-	// log request and response here  
-	log.Println("")
-	writer := bufio.NewWriter(conn)
-	_, err := writer.WriteString(response)
-	if err != nil {
-		fmt.Errorf("Issue writing back to client %s", err)
-		continue 
+	for {
+		reader := bufio.NewReader(conn)						/* Set up buffer reader 	*/ 	
+		request, err := reader.ReadString('\n') 			/* Read client request 		*/ 
+		if err != nil {
+			log.Println("%s", err)
+			return 
+		}
+		log.Print(request)									/* Log unparsed request 	*/ 
+		req := ParseRequest(request)						/* Send string  to parser 	*/
+		response := pi.HandleRequest(req)					/* Send req to indexer 		*/
+		// log request and response here  
+		log.Print(response)
+		writer := bufio.NewWriter(conn)
+		_, err1 := writer.WriteString(response)
+		if err1 != nil {
+			fmt.Errorf("Issue writing back to client %s", err1)
+		}
 	}
 }
 
