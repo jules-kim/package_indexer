@@ -11,12 +11,12 @@ import "strings"
 // It returns these three in a Request struct 
 func ParseRequest(req string) Request {
 	trimReq := strings.TrimSpace(strings.TrimSuffix(req, "\n"))
-
-	splitReq := strings.Split(trimReq, "|")						/* split the string by "|"		*/
+	// split the string by "|"
+	splitReq := strings.Split(trimReq, "|")						
 	if len(splitReq) != 3 {
 		return Request{"", "", nil, "Incorrect request format"}
 	}
-	deps := parseDep(splitReq[2])								/* parse deps by "," 			*/
+	deps := parseDep(splitReq[2])								
 	com := splitReq[0]
 	pack := splitReq[1]
 	
@@ -26,7 +26,7 @@ func ParseRequest(req string) Request {
 // parse dependencies by "," and returns 
 // the dependencies as an array of strings 
 func parseDep(d string) []string {
-	deps := strings.Split(d, ",")								/* split deps[] by ","			*/ 
+	deps := strings.Split(d, ",")							
 
 	return deps
 }

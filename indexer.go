@@ -21,14 +21,18 @@ func CreatePackageIndexer() *PackageIndexer {
 // directs the control flow to the correct function
 // depending on the command given by the client 
 func (pi *PackageIndexer) HandleRequest(req Request) string {
+	// bad request made 
 	if req.err != "" {
 		return ERROR 
 	}
-	pack := Package{name: req.pack}								/* set the name of the package 	*/
-	for _, name := range req.dep {								/* add package dependencies 	*/ 
+	// set the name of the package 	
+	pack := Package{name: req.pack}								
+	// add package dependencies 
+	for _, name := range req.dep {								 
 		pack.deps = append(pack.deps, &Package{name: name})
 	}
-    switch req.comm {											/* check command type 			*/
+	// check command type 
+    switch req.comm {											
     case "INDEX":
         return pi.Index(&pack)
     case "REMOVE":
@@ -37,7 +41,8 @@ func (pi *PackageIndexer) HandleRequest(req Request) string {
         return pi.Query(pack.name)
     }
 
-    return ERROR 												/* return ERROR response 		*/ 
+    // otherwise, error with request 
+    return ERROR 												
 }
 
 // Checks if a package's dependencies are already indexed.
@@ -47,8 +52,6 @@ func (pi *PackageIndexer) HandleRequest(req Request) string {
 func (pi *PackageIndexer) Index(pack *Package) string {
 	pi.mutex.Lock() 
 	defer pi.mutex.Unlock()
-	// what if dependencies are ""??
-
 	// foreach loop over the package's dependencies 
 	for _, dep := range pack.deps {
 		// query for each dependency
@@ -74,11 +77,11 @@ func (pi *PackageIndexer) Remove(pack *Package) string {
 		return OK
 	}
 	// check if any packages depend on the package to be removed 
-	// go through each pack in the index
+	// go through each package in the index
 	for _, p := range pi.packs {
-		// go through each pack's dependencies 
+		// go through each package's dependencies 
 		for _, dep := range p.deps {
-			// a pack's dependency depends on the pack to be removed
+			// a package's dependency depends on the package to be removed
 			if pack.name == dep.name {
 				return FAIL
 			}
@@ -96,9 +99,10 @@ func (pi *PackageIndexer) Remove(pack *Package) string {
 // Only input is the name of the package in order
 // to query for it by name. 
 func (pi *PackageIndexer) Query(name string) string {
-	if _, ok := pi.packs[name]; ok {							/* query indexer for pack 		*/ 
-        return OK 												/* package indexed 				*/
+	// query indexer for package 
+	if _, ok := pi.packs[name]; ok {							
+        return OK 												
     }
 
-    return FAIL													/* package not indexed 			*/ 
+    return FAIL													
 }
